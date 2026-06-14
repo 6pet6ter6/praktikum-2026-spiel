@@ -11,7 +11,7 @@ Du brauchst **keine Vorkenntnisse**. Wirklich keine. Dieses Tutorial nimmt dich 
 ## ⭐ So arbeitest du mit diesem Tutorial
 
 - **Tippe den Code selbst ab**, statt ihn nur zu kopieren. Klingt mühsam, aber so lernst du es wirklich. Beim Tippen verstehst du, was jedes Stück macht.
-- **Speichere oft** mit `Strg + S`. Dank „Live Server" lädt der Browser dann automatisch neu, und du siehst sofort, was sich geändert hat.
+- **Speichere oft** mit `Strg + S`. Dank „Live Server" lädt der Browser dann automatisch neu, und du siehst dort sofort, was sich geändert hat.
 - **Probier die „🔧 Probier aus"-Aufgaben.** Da darfst (und sollst!) du herumspielen. Kaputtmachen kannst du nichts – im schlimmsten Fall machst du die Änderung rückgängig mit `Strg + Z`.
 - **Führe ein kurzes Tagebuch.** Am Ende jedes Tages steht eine kleine „📓 Schreib auf"-Aufgabe. Daraus wird später deine Präsentation – das macht dir Freitag das Leben leicht.
 - **Wenn du nicht weiterkommst:** unten gibt es einen Abschnitt **„🆘 Wenn etwas nicht klappt"**. Schau da zuerst rein.
@@ -72,6 +72,7 @@ Notiere in einer Textdatei (oder auf Papier): *Was ist mir heute zum ersten Mal 
 ## 🎨 Tag 1 (Montag) – Formen, Farben & das Koordinatensystem
 
 **Ziel heute:** Du lernst, wie man auf dem Bildschirm zeichnet, und malst ein kleines Bild deiner Wahl.
+Lösche den Inhalt von `sketch.js`.
 
 ### Das Koordinatensystem
 
@@ -84,7 +85,7 @@ Bei einer Fläche von 600 × 400 ist also die **Mitte** bei x = 300, y = 200.
 
 ### Fang neu an
 
-Lösche den Inhalt von `sketch.js` und tippe das hier ein:
+Gehe in die Datei `sketch.js` und tippe das hier ein:
 
 ```js
 function setup() {
