@@ -1,27 +1,310 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mein Spiel</title>
-
-    <!-- p5.js wird hier aus dem Internet geladen (Version 1.11.13) -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Catcher</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/p5@1.11.13/lib/p5.min.js"></script>
 
     <style>
-      /* Sorgt dafür, dass die Zeichenfläche mittig auf der Seite sitzt */
-      body {
-        margin: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background: #4e4f4f;
-      }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #d75215, #ff1605);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px #e1ff00;
+            color: #ff004c;
+        }
+
+        #ui-container {
+            width: 400px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            background: rgba(253, 195, 6, 0.62);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid rgb(205, 91, 63);
+            backdrop-filter: blur(5px);
+        }
+
+        .stat span {
+            font-weight: bold;
+            color: #4991f5;
+        }
+
+        #game-container {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            background: linear-gradient(to bottom, #111b29, #1a2639);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 4px solid #ff007f;
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #game-over-screen {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 12, 27, 0.9);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        #game-over-screen h2 {
+            color: #ff0000;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+        }
+
+        #game-over-screen p {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(90deg, #c8a8b8, #7928ca);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 0 15px #680436;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #3134df;
+        }
+
+        #controls-info {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #aa4444;
+        }
     </style>
-  </head>
-  <body>
-    <!-- Hier steckt dein eigener Code: -->
-    <script src="sketch.js"></script>
-  </body>
+</head>
+<body>
+
+    <h1>Geld Fänger</h1>
+
+    <div id="ui-container">
+        <div class="stat">Punkte: <span id="score">0</span></div>
+        <div class="stat">Leben: <span id="lives">3</span></div>
+        <div class="stat">Highscore: <span id="highscore">0</span></div>
+    </div>
+
+    <div id="game-container">
+        <div id="game-over-screen">
+            <h2>GAME OVER</h2>
+            <p>Deine Punkte: <span id="final-score">0</span></p>
+            <button onclick="resetGame()">Nochmal spielen</button>
+        </div>
+    </div>
+
+    <div id="controls-info">Steuerung: Bewege die Maus nach links und rechts</div>
+
+    <script>
+    let score = 0;
+    let lives = 3;
+    let highscore = 0;
+    let isGameOver = false;
+
+    let objektX;
+    let objektY;
+    let objektGroesse = 30; 
+    let fallTempo = 4;
+
+    let korbX;
+    let korbBreite = 60; 
+
+    
+    let bgDreiecke = [];
+    let anzahlDreiecke = 15;
+
+    function setup() {
+      let canvas = createCanvas(392, 492); 
+      canvas.parent('game-container');
+      
+      korbX = width / 2;
+      
+      highscore = localStorage.getItem('coinHighscore') || 0;
+      document.getElementById('highscore').textContent = highscore;
+      
+      
+      for (let i = 0; i < anzahlDreiecke; i++) {
+        bgDreiecke.push({
+          x: random(0, width),
+          y: random(-height, height),
+          groesse: random(15, 35),
+          tempo: random(0.5, 2),
+          winkel: random(0, TWO_PI),
+          drehTempo: random(-0.02, 0.02)
+        });
+      }
+
+      neuesObjekt();
+    }
+
+    function draw() {
+      clear(); 
+
+      
+      for (let i = 0; i < bgDreiecke.length; i++) {
+        let d = bgDreiecke[i];
+        
+        
+        d.y += d.tempo;
+        d.winkel += d.drehTempo;
+
+       
+        if (d.y > height + 40) {
+          d.y = -40;
+          d.x = random(0, width);
+        }
+
+        
+        push();
+        translate(d.x, d.y);
+        rotate(d.winkel);
+        
+        
+        drawingContext.shadowBlur = 10;
+        drawingContext.shadowColor = 'rgba(255, 0, 127, 0.5)';
+        
+        
+        fill(255, 0, 127, 40); 
+        stroke(255, 0, 127, 150);
+        strokeWeight(1.5);
+        
+        
+        triangle(
+          0, -d.groesse / 2, 
+          -d.groesse / 2, d.groesse / 2, 
+          d.groesse / 2, d.groesse / 2
+        );
+        pop();
+      }
+
+      
+      drawingContext.shadowBlur = 0;
+
+      if (isGameOver) return;
+
+      
+      korbX = mouseX;
+      if (korbX < korbBreite / 2) korbX = korbBreite / 2;
+      if (korbX > width - korbBreite / 2) korbX = width - korbBreite / 2;
+
+      
+      drawingContext.shadowBlur = 15;
+      drawingContext.shadowColor = '#00f0ff';
+      fill(0, 240, 255);
+      noStroke();
+      rectMode(CENTER);
+      rect(korbX, height - 30, korbBreite, 20, 10); 
+      drawingContext.shadowBlur = 0; 
+
+      
+      objektY = objektY + fallTempo;
+      
+      
+      drawingContext.shadowBlur = 15;
+      drawingContext.shadowColor = '#ffd700';
+      fill(255, 215, 0);
+      circle(objektX, objektY, objektGroesse);
+      drawingContext.shadowBlur = 0; 
+
+      
+      if (
+        objektY >= height - 45 && objektY <= height - 15 &&
+        objektX > korbX - korbBreite / 2 &&
+        objektX < korbX + korbBreite / 2
+      ) {
+        score++;
+        document.getElementById('score').textContent = score; 
+        fallTempo += 0.3; 
+        neuesObjekt();
+      }
+
+      
+      if (objektY > height) {
+        lives--;
+        document.getElementById('lives').textContent = lives; 
+        if (lives <= 0) {
+          endGame();
+        } else {
+          neuesObjekt();
+        }
+      }
+    }
+
+    function neuesObjekt() {
+      objektX = random(20, width - 20);
+      objektY = 10; 
+    }
+
+    function endGame() {
+      isGameOver = true;
+      if (score > highscore) {
+        highscore = score;
+        localStorage.setItem('coinHighscore', highscore);
+        document.getElementById('highscore').textContent = highscore;
+      }
+
+      document.getElementById('final-score').textContent = score;
+      document.getElementById('game-over-screen').style.display = 'flex';
+    }
+
+    function resetGame() {
+      score = 0;
+      lives = 3;
+      fallTempo = 4;
+      isGameOver = false;
+
+      document.getElementById('score').textContent = score;
+      document.getElementById('lives').textContent = lives;
+      document.getElementById('game-over-screen').style.display = 'none';
+
+      neuesObjekt();
+      loop(); 
+    }
+    </script>
+</body>
 </html>

@@ -1,35 +1,105 @@
-// ====================================================
-//  Mein erstes p5.js-Programm
-//  Tipp: Speichern mit Strg+S -> der Browser lädt
-//  dank Live Server automatisch neu.
-// ====================================================
+let score = 0;
+let lives = 3;
+let highscore = 0;
+let isGameOver = false;
 
-// setup() läuft EINMAL ganz am Anfang.
+let objektX;
+let objektY;
+let objektGroesse = 30; 
+let fallTempo = 4;
+
+let korbX;
+let korbBreite = 60; 
+
 function setup() {
-  // Erstellt die Zeichenfläche (Breite, Höhe in Pixeln).
-  createCanvas(600, 400);
+ 
+  let canvas = createCanvas(392, 492); 
+  canvas.parent('game-container');
+  
+  korbX = width / 2;
+  
+  highscore = localStorage.getItem('coinHighscore') || 0;
+  document.getElementById('highscore').textContent = highscore;
+  
+  neuesObjekt();
 }
 
-// draw() läuft IMMER WIEDER, viele Male pro Sekunde.
-// Alles, was sich bewegen oder ändern soll, kommt hier rein.
 function draw() {
-  // Hintergrundfarbe (Rot, Grün, Blau – jeweils 0 bis 255).
-  background(30, 32, 40);
+  clear(); 
 
-  // Farbe für das, was als Nächstes gezeichnet wird.
-  fill(120, 200, 255);
+  if (isGameOver) return;
+
+  
+  korbX = mouseX;
+  if (korbX < korbBreite / 2) korbX = korbBreite / 2;
+  if (korbX > width - korbBreite / 2) korbX = width - korbBreite / 2;
+
+  
+  fill(0, 240, 255);
   noStroke();
+  rectMode(CENTER);
+  rect(korbX, height - 30, korbBreite, 20, 10); 
 
-  // Zeichnet einen Kreis dort, wo gerade die Maus ist.
-  // mouseX und mouseY sind die Maus-Koordinaten.
-  // Die letzte Zahl (80) ist der Durchmesser.
-  circle(mouseX, mouseY, 80);
+  
+  objektY = objektY + fallTempo;
+  
+  
+  fill(255, 215, 0);
+  circle(objektX, objektY, objektGroesse);
+
+ 
+
+  
+  if (
+    objektY >= height - 45 && objektY <= height - 15 &&
+    objektX > korbX - korbBreite / 2 &&
+    objektX < korbX + korbBreite / 2
+  ) {
+    score++;
+    document.getElementById('score').textContent = score; 
+    fallTempo += 0.3; 
+    neuesObjekt();
+  }
+
+  
+  if (objektY > height) {
+    lives--;
+    document.getElementById('lives').textContent = lives; 
+    if (lives <= 0) {
+      endGame();
+    } else {
+      neuesObjekt();
+    }
+  }
 }
 
-// ----------------------------------------------------
-//  Probier es aus! Verändere ein paar Werte und
-//  schau, was passiert:
-//   - andere Zahlen bei background(...) -> andere Farbe
-//   - andere Zahl bei circle(...) -> größerer/kleinerer Kreis
-//   - tausche circle(...) gegen square(mouseX, mouseY, 80)
-// ----------------------------------------------------
+function neuesObjekt() {
+  objektX = random(20, width - 20);
+  objektY = 10; 
+}
+
+function endGame() {
+  isGameOver = true;
+  if (score > highscore) {
+    highscore = score;
+    localStorage.setItem('coinHighscore', highscore);
+    document.getElementById('highscore').textContent = highscore;
+  }
+
+  document.getElementById('final-score').textContent = score;
+  document.getElementById('game-over-screen').style.display = 'flex';
+}
+
+function resetGame() {
+  score = 0;
+  lives = 3;
+  fallTempo = 4;
+  isGameOver = false;
+
+  document.getElementById('score').textContent = score;
+  document.getElementById('lives').textContent = lives;
+  document.getElementById('game-over-screen').style.display = 'none';
+
+  neuesObjekt();
+  loop(); 
+}
