@@ -10,9 +10,9 @@ let fallTempo = 4;
 
 let korbX;
 let korbBreite = 60; 
+let korbGeschwindigkeit = 6; 
 
 function setup() {
- 
   let canvas = createCanvas(392, 492); 
   canvas.parent('game-container');
   
@@ -29,8 +29,15 @@ function draw() {
 
   if (isGameOver) return;
 
-  
-  korbX = mouseX;
+
+  if (keyIsDown(LEFT_ARROW)) {
+    korbX -= korbGeschwindigkeit; 
+  }
+  if (keyIsDown(RIGHT_ARROW)) {
+    korbX += korbGeschwindigkeit; 
+  }
+
+ 
   if (korbX < korbBreite / 2) korbX = korbBreite / 2;
   if (korbX > width - korbBreite / 2) korbX = width - korbBreite / 2;
 
@@ -40,16 +47,16 @@ function draw() {
   rectMode(CENTER);
   rect(korbX, height - 30, korbBreite, 20, 10); 
 
-  
+ 
   objektY = objektY + fallTempo;
   
   
   fill(255, 215, 0);
-  circle(objektX, objektY, objektGroesse);
+  textSize(30);
+  text("🪙", objektX, objektY); 
+
 
  
-
-  
   if (
     objektY >= height - 45 && objektY <= height - 15 &&
     objektX > korbX - korbBreite / 2 &&

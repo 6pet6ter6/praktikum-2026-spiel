@@ -8,117 +8,147 @@
     <script src="https://cdn.jsdelivr.net/npm/p5@1.11.13/lib/p5.min.js"></script>
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
 
-        body {
-            background: linear-gradient(135deg, #d75215, #ff1605);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
-        }
+    body {
+        background: radial-gradient(circle at center, #1a1528, #09070f);
+        color: #f3f4f6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        overflow: hidden;
+    }
 
-        h1 {
-            margin-bottom: 10px;
-            font-size: 2.5rem;
-            text-shadow: 0 0 10px #e1ff00;
-            color: #ff004c;
-        }
+    h1 {
+        margin-bottom: 15px;
+        font-size: 2.8rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: #00f1fe;
+        text-shadow: 0 0 15px rgba(83, 36, 255, 0.6);
+        text-shadow:#00e1ff 0px 0px 10px, #ff0095 0px 0px 20px, #ff0000 0px 0px 30px;
+    }
 
-        #ui-container {
-            width: 400px;
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            background: rgba(253, 195, 6, 0.62);
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: 1px solid rgb(205, 91, 63);
-            backdrop-filter: blur(5px);
-        }
+    #ui-container {
+        width: 400px;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+        background: rgba(255, 255, 255, 0.07);
+        padding: 12px 25px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    }
 
-        .stat span {
-            font-weight: bold;
-            color: #4991f5;
-        }
+    .stat {
+        font-weight: 500;
+        color: #9ca3af;
+    }
 
-        #game-container {
-            position: relative;
-            width: 400px;
-            height: 500px;
-            background: linear-gradient(to bottom, #111b29, #1a2639);
-            border-radius: 15px;
-            overflow: hidden;
-            border: 4px solid #ff007f;
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
-        }
+    .stat span {
+        font-weight: bold;
+        color: #00f2fe;
+        margin-left: 5px;
+    }
 
-        canvas {
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
+    #game-container {
+        position: relative;
+        width: 400px;
+        height: 500px;
+        background: #0d0e15;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 2px solid #4f46e5;
+        box-shadow: 0 0 25px rgba(79, 70, 229, 0.4);
+    }
 
-        #game-over-screen {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 12, 27, 0.9);
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
+    canvas {
+        color:blueviolet;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 
-        #game-over-screen h2 {
-            color: #ff0000;
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
-        }
+    #game-over-screen {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(10, 7, 18, 0.95);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        backdrop-filter: blur(4px);
+    }
 
-        #game-over-screen p {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-        }
+    #game-over-screen h2 {
+        color: #ff0000;
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 15px;
+        text-shadow: 0 0 60px rgba(255, 0, 0, 0.6);
+    }
 
-        button {
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #fff;
-            background: linear-gradient(90deg, #c8a8b8, #7928ca);
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 0 15px #680436;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+    #game-over-screen p {
+        font-size: 1.2rem;
+        color: #ff0000;
+        margin-bottom: 30px;
+    }
 
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px #3134df;
-        }
+    button {
+        padding: 14px 35px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #ff0000;
+        background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        border: SOLID 2px #7c3aed;
+        border-radius: 30px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+        transition: all 0.2s ease-in-out;
+    }
 
-        #controls-info {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: #aa4444;
-        }
-    </style>
+    .ersteller {
+        margin-bottom: 15px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 3px;
+        color: #00f1fe;
+        text-shadow: 0 0 15px rgba(83, 36, 255, 0.6);
+        text-shadow:#00e1ff 0px 0px 10px, #ff0095 0px 0px 20px, #ff0000 0px 0px 30px;
+    } 
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+        background: linear-gradient(135deg, #ff7700, #00f2fe);
+    }
+
+    button:active {
+        transform: translateY(1px);
+    }
+
+    #controls-info {
+        margin-top: 20px;
+        font-size: 0.85rem;
+        color: #6b7280;
+        letter-spacing: 0.5px;
+    }
+</style>
 </head>
 <body>
 
@@ -131,6 +161,7 @@
     </div>
 
     <div id="game-container">
+      
         <div id="game-over-screen">
             <h2>GAME OVER</h2>
             <p>Deine Punkte: <span id="final-score">0</span></p>
@@ -138,173 +169,150 @@
         </div>
     </div>
 
-    <div id="controls-info">Steuerung: Bewege die Maus nach links und rechts</div>
-
-    <script>
-    let score = 0;
-    let lives = 3;
-    let highscore = 0;
-    let isGameOver = false;
-
-    let objektX;
-    let objektY;
-    let objektGroesse = 30; 
-    let fallTempo = 4;
-
-    let korbX;
-    let korbBreite = 60; 
-
+    <div id="controls-info">Steuerung: Pfeiltasten links und rechts</div>
+    <div class="ersteller">Spiel erstellt von Nico</div>
     
-    let bgDreiecke = [];
-    let anzahlDreiecke = 15;
+    <script>
+let score = 0;
+let lives = 3;
+let highscore = 0;
+let isGameOver = false;
 
-    function setup() {
-      let canvas = createCanvas(392, 492); 
-      canvas.parent('game-container');
-      
-      korbX = width / 2;
-      
-      highscore = localStorage.getItem('coinHighscore') || 0;
-      document.getElementById('highscore').textContent = highscore;
-      
-      
-      for (let i = 0; i < anzahlDreiecke; i++) {
-        bgDreiecke.push({
-          x: random(0, width),
-          y: random(-height, height),
-          groesse: random(15, 35),
-          tempo: random(0.5, 2),
-          winkel: random(0, TWO_PI),
-          drehTempo: random(-0.02, 0.02)
-        });
-      }
+let objektX;
+let objektY;
+let objektGroesse = 30; 
+let fallTempo = 4;
 
+let gefahrX;
+let gefahrY;
+let gefahrTempo = 4;
+
+let korbX;
+let korbBreite = 60; 
+let korbGeschwindigkeit = 6; 
+
+function setup() {
+  let canvas = createCanvas(392, 492); 
+  canvas.parent('game-container');
+  
+  korbX = width / 2;
+  
+  highscore = localStorage.getItem('coinHighscore') || 0;
+  document.getElementById('highscore').textContent = highscore;
+  
+  neuesObjekt();
+  neueGefahr();
+}
+
+function draw() {
+  clear(); 
+
+  if (isGameOver) return;
+
+  if (keyIsDown(LEFT_ARROW)) {
+    korbX -= korbGeschwindigkeit; 
+  }
+  if (keyIsDown(RIGHT_ARROW)) {
+    korbX += korbGeschwindigkeit; 
+  }
+
+  if (korbX < korbBreite / 2) korbX = korbBreite / 2;
+  if (korbX > width - korbBreite / 2) korbX = width - korbBreite / 2;
+
+  fill(0, 240, 255);
+  noStroke();
+  rectMode(CENTER);
+  rect(korbX, height - 30, korbBreite, 20, 10); 
+
+  objektY = objektY + fallTempo;
+  
+  fill(255, 215, 0);
+  textSize(30);
+  textAlign(CENTER, CENTER);
+  text("🪙", objektX, objektY); 
+
+  if (
+    objektY >= height - 45 && objektY <= height - 15 &&
+    objektX > korbX - korbBreite / 2 &&
+    objektX < korbX + korbBreite / 2
+  ) {
+    score++;
+    document.getElementById('score').textContent = score; 
+    fallTempo += 0.3; 
+    neuesObjekt();
+  }
+
+  if (objektY > height) {
+    lives--;
+    document.getElementById('lives').textContent = lives; 
+    if (lives <= 0) {
+      endGame();
+    } else {
       neuesObjekt();
     }
+  }
 
-    function draw() {
-      clear(); 
+  gefahrY = gefahrY + gefahrTempo;
+  text("💣", gefahrX, gefahrY);
 
-      
-      for (let i = 0; i < bgDreiecke.length; i++) {
-        let d = bgDreiecke[i];
-        
-        
-        d.y += d.tempo;
-        d.winkel += d.drehTempo;
-
-       
-        if (d.y > height + 40) {
-          d.y = -40;
-          d.x = random(0, width);
-        }
-
-        
-        push();
-        translate(d.x, d.y);
-        rotate(d.winkel);
-        
-        
-        drawingContext.shadowBlur = 10;
-        drawingContext.shadowColor = 'rgba(255, 0, 127, 0.5)';
-        
-        
-        fill(255, 0, 127, 40); 
-        stroke(255, 0, 127, 150);
-        strokeWeight(1.5);
-        
-        
-        triangle(
-          0, -d.groesse / 2, 
-          -d.groesse / 2, d.groesse / 2, 
-          d.groesse / 2, d.groesse / 2
-        );
-        pop();
-      }
-
-      
-      drawingContext.shadowBlur = 0;
-
-      if (isGameOver) return;
-
-      
-      korbX = mouseX;
-      if (korbX < korbBreite / 2) korbX = korbBreite / 2;
-      if (korbX > width - korbBreite / 2) korbX = width - korbBreite / 2;
-
-      
-      drawingContext.shadowBlur = 15;
-      drawingContext.shadowColor = '#00f0ff';
-      fill(0, 240, 255);
-      noStroke();
-      rectMode(CENTER);
-      rect(korbX, height - 30, korbBreite, 20, 10); 
-      drawingContext.shadowBlur = 0; 
-
-      
-      objektY = objektY + fallTempo;
-      
-      
-      drawingContext.shadowBlur = 15;
-      drawingContext.shadowColor = '#ffd700';
-      fill(255, 215, 0);
-      circle(objektX, objektY, objektGroesse);
-      drawingContext.shadowBlur = 0; 
-
-      
-      if (
-        objektY >= height - 45 && objektY <= height - 15 &&
-        objektX > korbX - korbBreite / 2 &&
-        objektX < korbX + korbBreite / 2
-      ) {
-        score++;
-        document.getElementById('score').textContent = score; 
-        fallTempo += 0.3; 
-        neuesObjekt();
-      }
-
-      
-      if (objektY > height) {
-        lives--;
-        document.getElementById('lives').textContent = lives; 
-        if (lives <= 0) {
-          endGame();
-        } else {
-          neuesObjekt();
-        }
-      }
+  if (
+    gefahrY >= height - 45 && gefahrY <= height - 15 &&
+    gefahrX > korbX - korbBreite / 2 &&
+    gefahrX < korbX + korbBreite / 2
+  ) {
+    lives--;
+    document.getElementById('lives').textContent = lives;
+    
+    if (lives <= 0) {
+      endGame();
+    } else {
+      neueGefahr();
     }
+  }
 
-    function neuesObjekt() {
-      objektX = random(20, width - 20);
-      objektY = 10; 
-    }
+  if (gefahrY > height) {
+    neueGefahr();
+  }
+}
 
-    function endGame() {
-      isGameOver = true;
-      if (score > highscore) {
-        highscore = score;
-        localStorage.setItem('coinHighscore', highscore);
-        document.getElementById('highscore').textContent = highscore;
-      }
 
-      document.getElementById('final-score').textContent = score;
-      document.getElementById('game-over-screen').style.display = 'flex';
-    }
+function neuesObjekt() {
+  objektX = random(20, width - 20);
+  objektY = 10; 
+}
 
-    function resetGame() {
-      score = 0;
-      lives = 3;
-      fallTempo = 4;
-      isGameOver = false;
+function neueGefahr() {
+  gefahrX = random(20, width - 20);
+  gefahrY = random(-1000, -400); 
+}
 
-      document.getElementById('score').textContent = score;
-      document.getElementById('lives').textContent = lives;
-      document.getElementById('game-over-screen').style.display = 'none';
 
-      neuesObjekt();
-      loop(); 
-    }
+function endGame() {
+  isGameOver = true;
+  if (score > highscore) {
+    highscore = score;
+    localStorage.setItem('coinHighscore', highscore);
+    document.getElementById('highscore').textContent = highscore;
+  }
+
+  document.getElementById('final-score').textContent = score;
+  document.getElementById('game-over-screen').style.display = 'flex';
+}
+
+function resetGame() {
+  score = 0;
+  lives = 3;
+  fallTempo = 4;
+  isGameOver = false;
+
+  document.getElementById('score').textContent = score;
+  document.getElementById('lives').textContent = lives;
+  document.getElementById('game-over-screen').style.display = 'none';
+
+  neuesObjekt();
+  neueGefahr();
+  loop(); 
+}
     </script>
 </body>
 </html>
